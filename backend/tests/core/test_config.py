@@ -84,6 +84,27 @@ def test_entry_window_must_be_ordered(monkeypatch: pytest.MonkeyPatch) -> None:
         Settings()
 
 
+def test_entry_window_start_before_market_open_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("ENTRY_WINDOW_START", "09:00")
+    with pytest.raises(ValidationError, match="entry window"):
+        Settings()
+
+
+def test_intraday_squareoff_after_market_close_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("INTRADAY_SQUAREOFF", "15:45")
+    with pytest.raises(ValidationError, match="entry window"):
+        Settings()
+
+
+def test_validation_error_does_not_echo_live_confirm(monkeypatch: pytest.MonkeyPatch) -> None:
+    # I2 (safety rules §4): a raised ValidationError must never leak secret-shaped input back out.
+    monkeypatch.setenv("TRADING_MODE", "live")
+    monkeypatch.setenv("LIVE_CONFIRM", "sentinel-secret-7731")
+    with pytest.raises(ValidationError) as excinfo:
+        Settings()
+    assert "sentinel-secret-7731" not in str(excinfo.value)
+
+
 def test_charge_rates_from_settings(monkeypatch: pytest.MonkeyPatch) -> None:
     assert Settings().charge_rates() == ChargeRates()
     monkeypatch.setenv("BROKERAGE_PER_ORDER", "20")

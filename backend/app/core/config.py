@@ -19,7 +19,9 @@ LIVE_CONFIRM_PHRASE = "I_UNDERSTAND_REAL_MONEY"
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore", frozen=True)
+    model_config = SettingsConfigDict(
+        env_file=".env", extra="ignore", frozen=True, hide_input_in_errors=True
+    )
 
     # Mode (safety rules §1). Live is only ever set by the owner in .env.
     trading_mode: Literal["paper", "live"] = "paper"
@@ -57,6 +59,12 @@ class Settings(BaseSettings):
             raise ValueError("live mode requires LIVE_CONFIRM to be set by the owner in .env")
         if not (self.entry_window_start < self.entry_window_end < self.intraday_squareoff):
             raise ValueError("entry window must satisfy start < end < intraday squareoff")
+        if self.entry_window_start < time(9, 15):
+            raise ValueError("entry window must not start before market open (09:15)")
+        if self.intraday_squareoff > time(15, 30):
+            raise ValueError(
+                "entry window's intraday squareoff must not be after market close (15:30)"
+            )
         if self.risk_per_trade >= self.capital:
             raise ValueError("risk_per_trade must be smaller than capital")
         return self
