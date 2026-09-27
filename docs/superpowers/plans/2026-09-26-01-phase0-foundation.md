@@ -1,5 +1,7 @@
 # Phase 0: Foundation Implementation Plan
 
+> **SUPERSEDED (2026-09-27):** the project changed to an auto-trading system on the INDstocks API. See `docs/research/07-decisions-log.md`. Kept for history; the Laya facts in the spec (§2) are still valid.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** A runnable, tested, containerized backend skeleton with CI. Every later phase plugs into it.

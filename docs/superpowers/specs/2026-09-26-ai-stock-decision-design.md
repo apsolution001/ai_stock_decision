@@ -1,5 +1,7 @@
 # AI Stock Decision — Design Spec
 
+> **SUPERSEDED (2026-09-27):** the project changed to an auto-trading system on the INDstocks API. See `docs/research/07-decisions-log.md`. Kept for history; the Laya facts in the spec (§2) are still valid.
+
 - **Date:** 2026-09-26
 - **Status:** Approved (brainstorming)
 - **Market:** Indian equities (NSE / BSE)
