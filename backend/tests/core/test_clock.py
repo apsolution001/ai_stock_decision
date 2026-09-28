@@ -1,16 +1,9 @@
-from collections.abc import Iterator
 from datetime import UTC, datetime, timedelta
 
 import pytest
 
 from app.core import clock
 from app.core.clock import IST, FixedClock, SystemClock, set_clock, to_ist
-
-
-@pytest.fixture(autouse=True)
-def _restore_clock() -> Iterator[None]:
-    yield
-    set_clock(SystemClock())
 
 
 def test_system_clock_is_ist_aware() -> None:

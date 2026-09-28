@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+from app.core.clock import SystemClock, set_clock
 from app.core.config import Settings, get_settings
 
 
@@ -14,5 +15,9 @@ def _hermetic(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[None]
     for name in Settings.model_fields:
         monkeypatch.delenv(name.upper(), raising=False)
     get_settings.cache_clear()
+    # M2: reset the global clock on both sides so one test's injected FixedClock can never
+    # leak into the next test, regardless of which test forgets to reset it itself.
+    set_clock(SystemClock())
     yield
+    set_clock(SystemClock())
     get_settings.cache_clear()
