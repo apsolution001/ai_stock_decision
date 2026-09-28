@@ -16,6 +16,8 @@ Brainstorming / design. Decisions are in `docs/research/07-decisions-log.md`. De
 
 Rollout: **Step 1** backtest 3 strategies → **Step 2** live engine + paper + UI (first 3 days observe-only) → **Step 3** 2–4 weeks paper → **Step 4** live (static IP).
 
+Foundation (scaffold, IST clock, charges, validated config, indicators, CI) is built per `docs/superpowers/plans/2026-09-27-01-foundation.md`.
+
 ## Key numbers (from the decisions log)
 
 | Setting | Value |
@@ -67,9 +69,12 @@ Rollout: **Step 1** backtest 3 strategies → **Step 2** live engine + paper + U
 
 ## Commands (once scaffolded)
 
+On Windows, one script wraps all of these: `.\run.ps1 setup | check | fix | test | serve` (run `.\run.ps1 help`).
+
 ```bash
-uv run pytest                  # unit + safety tests
-uv run ruff check . && uv run mypy backend/app
-uv run uvicorn app.main:app    # backend
-pnpm --dir web dev             # UI
+uv sync                                        # install deps (Python 3.11 via .python-version)
+uv run pytest                                  # unit + safety tests
+uv run ruff format . && uv run ruff check . && uv run mypy backend/app
+uv run uvicorn app.main:app --app-dir backend  # backend
+pnpm --dir web dev                             # UI (later)
 ```
