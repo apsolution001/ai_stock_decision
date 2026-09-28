@@ -17,7 +17,11 @@ def true_range(candles: pd.DataFrame) -> pd.Series:
 
 
 def atr(candles: pd.DataFrame, period: int = 14) -> pd.Series:
-    """Wilder's ATR (TA-Lib convention): first value at index `period` = mean of TR[1..period]."""
+    """Wilder's ATR (TA-Lib convention): first value at index `period` = mean of TR[1..period].
+
+    A NaN anywhere in `candles` propagates to every later value (ATR is recursive), so callers
+    must fill or split data gaps before calling this.
+    """
     if period < 1:
         raise ValueError(f"period must be >= 1, got {period}")
     tr = true_range(candles).to_numpy(dtype=float)

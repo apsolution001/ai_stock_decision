@@ -3,7 +3,11 @@ import pandas as pd
 
 
 def ema(values: pd.Series, period: int) -> pd.Series:
-    """EMA seeded with the SMA of the first `period` values (TA-Lib convention); NaN before that."""
+    """EMA seeded with the SMA of the first `period` values (TA-Lib convention); NaN before that.
+
+    A NaN anywhere in `values` propagates to every later value (EMA is recursive), so callers
+    must fill or split data gaps before calling this.
+    """
     if period < 1:
         raise ValueError(f"period must be >= 1, got {period}")
     arr = values.to_numpy(dtype=float)

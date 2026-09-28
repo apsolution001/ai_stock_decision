@@ -9,7 +9,11 @@ def _rsi_value(avg_gain: float, avg_loss: float) -> float:
 
 
 def rsi(close: pd.Series, period: int = 14) -> pd.Series:
-    """Wilder's RSI. The first value is at index `period` (needs `period` price changes)."""
+    """Wilder's RSI. The first value is at index `period` (needs `period` price changes).
+
+    A NaN anywhere in `close` propagates to every later value (the average gain/loss is
+    recursive), so callers must fill or split data gaps before calling this.
+    """
     if period < 1:
         raise ValueError(f"period must be >= 1, got {period}")
     arr = close.to_numpy(dtype=float)
