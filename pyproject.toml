@@ -18,6 +18,7 @@ dev = [
     "ruff>=0.6",
     "mypy>=1.11",
     "pandas-stubs>=2.2",
+    "pre-commit>=3.7",
 ]
 
 [tool.uv]
@@ -26,6 +27,9 @@ package = false
 [tool.pytest.ini_options]
 testpaths = ["backend/tests"]
 pythonpath = ["backend"]
+# M1: without this, two test files sharing a basename (e.g. two test_config.py under
+# different subpackages) fail to collect since prepend mode needs unique module names.
+addopts = "--import-mode=importlib"
 
 [tool.ruff]
 line-length = 100
