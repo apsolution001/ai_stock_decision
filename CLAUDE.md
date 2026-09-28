@@ -69,6 +69,8 @@ Foundation (scaffold, IST clock, charges, validated config, indicators, CI) is b
 
 ## Commands (once scaffolded)
 
+On Windows, one script wraps all of these: `.\run.ps1 setup | check | fix | test | serve` (run `.\run.ps1 help`).
+
 ```bash
 uv sync                                        # install deps (Python 3.11 via .python-version)
 uv run pytest                                  # unit + safety tests
